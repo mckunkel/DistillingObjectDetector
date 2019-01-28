@@ -1,7 +1,6 @@
 #used to create a dataframe of the metadata for later use
 import pandas as pd
 from make_metadata import make_metadata as md
-import constants as c
 
 
 def create_dataframe():

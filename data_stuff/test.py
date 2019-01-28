@@ -1,7 +1,6 @@
 import os
 import constants as c
 import matplotlib.pyplot as plt
-from scipy import misc
 
 sub_dirs = list(os.walk(c.dir_train))[1:]
 dir_path = sub_dirs[0][0];

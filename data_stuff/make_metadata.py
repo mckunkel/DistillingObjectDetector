@@ -1,7 +1,9 @@
+#creates metadata
+
 import os
 import constants as c
 import matplotlib.pyplot as plt
-
+from tqdm import tqdm
 
 def make_metadata():
     sub_dirs = list(os.walk(c.dir_train))[1:]
@@ -9,7 +11,7 @@ def make_metadata():
     # collect data_stuff metadata
     train_metadata = []
 
-    for dir_path, _, files in sub_dirs:
+    for dir_path, _, files in tqdm(sub_dirs):
 
         dir_name = dir_path.split('/')[-1]
 
