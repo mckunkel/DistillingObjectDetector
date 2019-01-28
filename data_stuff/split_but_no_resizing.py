@@ -41,7 +41,7 @@ for i, row in tqdm(val.loc[val.channels == 3].iterrows()):
     image = Image.open(file_path)
 
     # save
-    save_path = os.path.join(data_dir, 'val', str(row.category_number), row.img_name)
+    save_path = os.path.join(data_dir, 'val_no_resizing', str(row.category_number), row.img_name)
     image.save(save_path, 'jpeg')
 
 # grayscale images
@@ -56,7 +56,7 @@ for i, row in tqdm(val.loc[val.channels == 1].iterrows()):
     image = Image.fromarray(array)
 
     # save
-    save_path = os.path.join(data_dir, 'val', str(row.category_number), row.img_name)
+    save_path = os.path.join(data_dir, 'val_no_resizing', str(row.category_number), row.img_name)
     image.save(save_path, 'jpeg')
 
 train_size = len(train)
