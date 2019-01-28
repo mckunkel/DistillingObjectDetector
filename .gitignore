@@ -1,3 +1,6 @@
+#the data directories
+data_stuff/*.tar
+data_stuff/256_ObjectCategories/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
