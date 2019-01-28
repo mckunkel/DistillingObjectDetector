@@ -14,5 +14,9 @@ https://arxiv.org/abs/1503.02531
 
 
 ## Usage
-In data_stuff run python3 run_scripts.py
+### Data (folder data_stuff)
+#### Get the Data
+* python3 run_scripts.py
+### Split the data
+* python3 split_but_no_resizing.py
 
