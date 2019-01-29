@@ -121,8 +121,8 @@ def miniXception(weight_decay=1e-4, classes=256, input_shape=(299, 299, 3),num_r
 
     model = Model(model.input, probabilities, name='minixception')
 
-    for layer in model.layers[:-7]:
-        layer.trainable = False
+    # for layer in model.layers[:-7]:
+    #     layer.trainable = False
 
 # ####
 #
