@@ -56,10 +56,10 @@ val_generator = data_generator.flow_from_directory(
 
 def distill(temperature = 5.0, lambda_const = 0.07):
     print('############# Temperature #############')
-    print('#############     '+temperature+'#############')
+    print('#############     {} #############'.format(temperature))
     print('########################################')
     print('############# lambda_const #############')
-    print('#############     '+lambda_const+'#############')
+    print('#############     {}  #############' .format(lambda_const))
     print('########################################')
 
     model = miniXception(weight_decay=1e-5, num_residuals=0)
