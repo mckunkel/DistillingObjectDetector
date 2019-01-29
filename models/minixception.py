@@ -131,21 +131,21 @@ def miniXception(weight_decay=1e-4, classes=257, input_shape=(299, 299, 3),num_r
     for layer in model.layers[:-7]:
         layer.trainable = False
 
-####
-
-    # add entropy to the usual logloss (it is for regularization),
-    # "Regularizing Neural Networks by Penalizing Confident Output Distributions",
-    # https://arxiv.org/abs/1701.06548
-    # it reduces overfitting a little bit
-    def loss(y_true, y_pred):
-        entropy = -K.mean(K.sum(y_pred * K.log(y_pred), 1))
-        beta = 0.1
-        return logloss(y_true, y_pred) - beta * entropy
-
-    model.compile(
-        optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
-        loss=loss, metrics=['categorical_crossentropy', 'accuracy', 'top_k_categorical_accuracy']
-    )
+# ####
+#
+#     # add entropy to the usual logloss (it is for regularization),
+#     # "Regularizing Neural Networks by Penalizing Confident Output Distributions",
+#     # https://arxiv.org/abs/1701.06548
+#     # it reduces overfitting a little bit
+#     def loss(y_true, y_pred):
+#         entropy = -K.mean(K.sum(y_pred * K.log(y_pred), 1))
+#         beta = 0.1
+#         return logloss(y_true, y_pred) - beta * entropy
+#
+#     model.compile(
+#         optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
+#         loss=loss, metrics=['categorical_crossentropy', 'accuracy', 'top_k_categorical_accuracy']
+#     )
 
     orig_stdout = sys.stdout
     f = open('miniXceptionSummary_{}.txt'.format(num_residuals), 'w')
