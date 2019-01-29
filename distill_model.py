@@ -136,8 +136,8 @@ model.fit_generator(
     train_generator,
     steps_per_epoch=400, epochs=30, verbose=1,
     callbacks=[
-        ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=2, min_delta=0.007)
-        EarlyStopping(monitor='val_acc', patience=4, min_delta=0.01),
+        ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=2, min_delta=0.007),
+        EarlyStopping(monitor='val_acc', patience=4, min_delta=0.01)
     ],
     validation_data=val_generator, validation_steps=80, workers=4
 )
