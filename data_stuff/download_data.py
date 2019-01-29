@@ -2,6 +2,8 @@
 
 import requests, sys
 import constants as c
+
+
 def get_data():
     with open(c.file_train, "wb") as f:
         print("Downloading %s" % c.file_train)

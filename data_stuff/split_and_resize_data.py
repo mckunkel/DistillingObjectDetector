@@ -7,6 +7,7 @@ import torchvision.transforms as transforms
 import os
 from tqdm import tqdm
 import constants as c
+
 # the folder from 256_ObjectCategories.tar file
 train_dir = c.dir_train
 

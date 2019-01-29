@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from PIL import Image, ImageEnhance
-import torchvision.transforms as transforms
+from PIL import Image
 
 import os
 from tqdm import tqdm
 import constants as c
+
 # the folder from 256_ObjectCategories.tar file
 train_dir = c.dir_train
 
@@ -22,13 +22,13 @@ val = pd.read_csv('val_metadata.csv')
 
 if not os.path.isdir(data_dir + 'train_no_resizing'):
     os.mkdir(data_dir + 'train_no_resizing')
-for i in range(1, 257 + 1):
+for i in range(1, 256 + 1):
     if not os.path.isdir(data_dir + 'train_no_resizing/' + str(i)):
         os.mkdir(data_dir + 'train_no_resizing/' + str(i))
 
 if not os.path.isdir(data_dir + 'val_no_resizing'):
     os.mkdir(data_dir + 'val_no_resizing')
-for i in range(1, 257 + 1):
+for i in range(1, 256 + 1):
     if not os.path.isdir(data_dir + 'val_no_resizing/' + str(i)):
         os.mkdir(data_dir + 'val_no_resizing/' + str(i))
 

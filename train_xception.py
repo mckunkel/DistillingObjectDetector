@@ -8,8 +8,8 @@ from keras import backend as K
 import matplotlib.pyplot as plt
 
 from models.xception import Xception, preprocess_input
-
-data_dir = 'data_stuff/'
+import model_constants as c
+data_dir = c.data_dir
 
 data_generator = ImageDataGenerator(
     rotation_range=30,

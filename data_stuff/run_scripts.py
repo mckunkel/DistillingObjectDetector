@@ -8,9 +8,6 @@ from split_save_data import  run_package
 # 3. Create the decoder
 # 4. Create the training.csv files
 
-print('Checking for data')
 run_data_checker()
-print('Cleaning for data')
 clean_data()
-print('Running decoder and split save decoder')
 run_package()

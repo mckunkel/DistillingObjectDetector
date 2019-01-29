@@ -21,7 +21,7 @@ def preprocess_input(x):
     return x
 
 
-def miniXception(weight_decay=1e-4, classes=257, input_shape=(299, 299, 3)):
+def miniXception(weight_decay=1e-4, classes=257, input_shape=(299, 299, 3),num_residuals=8):
     img_input = Input(shape=input_shape)
 
     x = Conv2D(32, (3, 3), strides=(2, 2), use_bias=False, name='block1_conv1')(img_input)
@@ -69,7 +69,7 @@ def miniXception(weight_decay=1e-4, classes=257, input_shape=(299, 299, 3)):
     x = MaxPooling2D((3, 3), strides=(2, 2), padding='same', name='block4_pool')(x)
     x = layers.add([x, residual])
 
-    for i in range(2):
+    for i in range(num_residuals):
         residual = x
         prefix = 'block' + str(i + 5)
 
@@ -148,7 +148,7 @@ def miniXception(weight_decay=1e-4, classes=257, input_shape=(299, 299, 3)):
     )
 
     orig_stdout = sys.stdout
-    f = open('miniXceptionSummary.txt', 'w')
+    f = open('miniXceptionSummary_{}.txt'.format(num_residuals), 'w')
     sys.stdout = f
     print(model.summary())
     sys.stdout = orig_stdout
@@ -158,4 +158,4 @@ def miniXception(weight_decay=1e-4, classes=257, input_shape=(299, 299, 3)):
 
 
 if __name__ == '__main__':
-    miniXception(weight_decay=1e-5)
+    miniXception(weight_decay=1e-5,num_residuals=1)
