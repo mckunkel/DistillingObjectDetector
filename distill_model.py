@@ -51,7 +51,7 @@ train_generator = data_generator.flow_from_directory(
 val_generator = data_generator.flow_from_directory(
     data_dir + 'val_no_resizing', val_logits,
     target_size=(299, 299),
-    batch_size=16
+    batch_size=8
 )
 
 def distill(temperature = 5.0, lambda_const = 0.07):
