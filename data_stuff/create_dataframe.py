@@ -16,3 +16,7 @@ def create_dataframe():
     meta_data.category_name = meta_data.category_name.apply(lambda x: x[:-4] if '101' in x else x)
 
     return meta_data
+
+
+if __name__ == '__main__':
+    create_dataframe()

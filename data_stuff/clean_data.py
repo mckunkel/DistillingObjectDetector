@@ -17,3 +17,13 @@ def clean_data():
     path = os.path.join(c.dir_train, '056.dog/greg')
     if os.path.isdir(path):
         shutil.rmtree(path)
+
+    # testing to attempt to increase accuracy
+    #removing the clutter
+
+    path = os.path.join(c.dir_train, '257.clutter')
+    if os.path.exists(path):
+        shutil.rmtree(path)
+
+if __name__ == '__main__':
+    clean_data()

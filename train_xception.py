@@ -36,7 +36,7 @@ train_generator = data_generator.flow_from_directory(
 )
 
 val_generator = data_generator_val.flow_from_directory(
-    data_dir + 'val', shuffle=False,
+    data_dir + 'val_no_resizing', shuffle=False,
     target_size=(299, 299),
     batch_size=64
 )
