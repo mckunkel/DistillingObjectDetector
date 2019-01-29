@@ -139,7 +139,7 @@ model.fit_generator(
         EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
         ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, min_delta=0.007)
     ],
-    validation_data=val_generator, validation_steps=80, workers=4
+    validation_data=val_generator, validation_steps=80
 )
 
 # metric plots
@@ -169,5 +169,5 @@ val_generator_no_shuffle = data_generator.flow_from_directory(
     target_size=(224, 224),
     batch_size=64, shuffle=False
 )
-
+model.save_weights('miniXception_weights.hdf5')
 print(model.evaluate_generator(val_generator_no_shuffle, 80))
