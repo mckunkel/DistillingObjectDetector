@@ -170,6 +170,6 @@ def distill(temperature = 5.0, lambda_const = 0.07):
 
 
 if __name__ == '__main__':
-    temperature = sys.argv[1]
-    lambda_const = sys.argv[2]
+    temperature = float(sys.argv[1])
+    lambda_const = float(sys.argv[2])
     distill(temperature, lambda_const)
