@@ -44,13 +44,13 @@ data_generator = ImageDataGenerator(
 train_generator = data_generator.flow_from_directory(
     data_dir + 'train_no_resizing', train_logits,
     target_size=(299, 299),
-    batch_size=64
+    batch_size=16
 )
 
 val_generator = data_generator.flow_from_directory(
     data_dir + 'val_no_resizing', val_logits,
     target_size=(299, 299),
-    batch_size=64
+    batch_size=16
 )
 
 # class Distill:
@@ -136,10 +136,10 @@ model.fit_generator(
     train_generator,
     steps_per_epoch=400, epochs=30, verbose=1,
     callbacks=[
-        EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
-        ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, min_delta=0.007)
+        ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=2, min_delta=0.007)
+        EarlyStopping(monitor='val_acc', patience=4, min_delta=0.01),
     ],
-    validation_data=val_generator, validation_steps=80
+    validation_data=val_generator, validation_steps=80, workers=4
 )
 
 # metric plots
@@ -150,8 +150,8 @@ plt.xlabel('epoch')
 plt.ylabel('logloss')
 plt.savefig('student_logloss_vs_epoch.png')
 
-plt.plot(model.history.history['accuracy'], label='train')
-plt.plot(model.history.history['val_accuracy'], label='val')
+plt.plot(model.history.history['acc'], label='train')
+plt.plot(model.history.history['val_acc'], label='val')
 plt.legend()
 plt.xlabel('epoch')
 plt.ylabel('accuracy')
