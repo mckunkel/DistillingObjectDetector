@@ -1,1 +1,1 @@
-data_dir = '../data_stuff/'
+data_dir = 'data_stuff/'
