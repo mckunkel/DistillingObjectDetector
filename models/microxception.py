@@ -21,7 +21,7 @@ def preprocess_input(x):
     return x
 
 
-def miniXception(weight_decay=1e-4, classes=256, input_shape=(299, 299, 3),num_residuals=8):
+def microXception(weight_decay=1e-4, classes=256, input_shape=(299, 299, 3),num_residuals=8):
     img_input = Input(shape=input_shape)
 
     x = Conv2D(32, (3, 3), strides=(2, 2), use_bias=False, name='block1_conv1')(img_input)
@@ -141,7 +141,7 @@ def miniXception(weight_decay=1e-4, classes=256, input_shape=(299, 299, 3),num_r
 #     )
 
     orig_stdout = sys.stdout
-    f = open('miniXceptionSummary_redsiduals_{}.txt'.format(num_residuals), 'w')
+    f = open('microXceptionSummary_redsiduals_{}.txt'.format(num_residuals), 'w')
     sys.stdout = f
     print(model.summary())
     sys.stdout = orig_stdout
@@ -151,4 +151,4 @@ def miniXception(weight_decay=1e-4, classes=256, input_shape=(299, 299, 3),num_r
 
 
 if __name__ == '__main__':
-    miniXception(weight_decay=1e-5,num_residuals=0)
+    microXception(weight_decay=1e-5,num_residuals=0)
