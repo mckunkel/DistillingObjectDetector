@@ -69,10 +69,17 @@ def distill(temperature=5.0, lambda_const=0.07):
 
     #lambda_const = 0.2
 
+    # logloss with only soft probabilities and targets
+    def soft_logloss(y_true, y_pred):
+        logits = y_true[:, 256:]
+        y_soft = K.softmax(logits / temperature)
+        y_pred_soft = y_pred[:, 256:]
+        return logloss(y_soft, y_pred_soft)
+
     model.compile(
         optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
         loss=lambda y_true, y_pred: distill_fn(y_true, y_pred, lambda_const),
-        metrics=[mf.accuracy, mf.top_5_accuracy, mf.categorical_crossentropy, mf.soft_logloss(temperature=temperature)]
+        metrics=[mf.accuracy, mf.top_5_accuracy, mf.categorical_crossentropy, soft_logloss]
     )
 
     model.fit_generator(

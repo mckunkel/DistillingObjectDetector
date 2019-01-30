@@ -19,11 +19,3 @@ def categorical_crossentropy(y_true, y_pred):
     y_true = y_true[:, :256]
     y_pred = y_pred[:, :256]
     return logloss(y_true, y_pred)
-
-
-# logloss with only soft probabilities and targets
-def soft_logloss(y_true, y_pred, temperature):
-    logits = y_true[:, 256:]
-    y_soft = K.softmax(logits / temperature)
-    y_pred_soft = y_pred[:, 256:]
-    return logloss(y_soft, y_pred_soft)
