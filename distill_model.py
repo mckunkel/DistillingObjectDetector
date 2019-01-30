@@ -45,13 +45,13 @@ data_generator = ImageDataGenerator(
 train_generator = data_generator.flow_from_directory(
     data_dir + 'train', train_logits,
     target_size=(299, 299),
-    batch_size=64
+    batch_size=16
 )
 
 val_generator = data_generator.flow_from_directory(
     data_dir + 'val', val_logits,
     target_size=(299, 299),
-    batch_size=64
+    batch_size=16
 )
 
 
