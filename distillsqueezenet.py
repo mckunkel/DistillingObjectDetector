@@ -17,10 +17,10 @@ from keras import backend as K
 from models.squeezenet import SqueezeNet, preprocess_input
 import constants as c
 from utils.knowledge_distallion_loss_fn import knowledge_distillation_loss as distill_fn
-import utils.metric_functions as mf
-import utils.plot_utils as plot_utils
-import utils.history_utils as history_utils
-import utils.save_utils as save_utils
+from utils import metric_functions as mf
+from utils.plot_utils import plot_utils as plt_uts
+from utils.history_utils import history_utils as hist_uts
+from utils.save_utils import save_utils as save_uts
 
 data_dir = c.data_dir
 
@@ -84,7 +84,7 @@ def distill(temperature=5.0, lambda_const=0.07):
 
     model.fit_generator(
         train_generator,
-        steps_per_epoch=40, epochs=30, verbose=1,
+        steps_per_epoch=4, epochs=3, verbose=1,
         callbacks=[
             EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
             ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, min_delta=0.007)
@@ -92,9 +92,11 @@ def distill(temperature=5.0, lambda_const=0.07):
         validation_data=val_generator, validation_steps=80, workers=4
     )
 
-    plot_utils(model,'squeezenet',temperature, lambda_const)
-    history_utils(model,'squeezenet',temperature, lambda_const)
-    save_utils(model,'squeezenet',temperature, lambda_const)
+    plt_uts(model,'squeezenet',temperature, lambda_const)
+
+    hist_uts(model,'squeezenet',temperature, lambda_const)
+
+    save_uts(model,'squeezenet',temperature, lambda_const)
 
 
     val_generator_no_shuffle = data_generator.flow_from_directory(

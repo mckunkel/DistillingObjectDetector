@@ -1,7 +1,6 @@
 
 
-
-def plot_utils(model, student_name,temperature, lambda_const, num_residuals=0):
+def save_utils(model, student_name,temperature, lambda_const, num_residuals=0):
     # Lets make some save strings first, some models will not depend on num_residuals
     if num_residuals == 0:
         json_name = "distilled_{}_model_T_{}_lambda_{}.json".format(student_name, temperature, lambda_const)
