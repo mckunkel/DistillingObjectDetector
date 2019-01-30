@@ -78,7 +78,7 @@ def distill(temperature=5.0, lambda_const=0.07):
 
     model.compile(
         optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
-        loss=lambda y_true, y_pred: distill_fn(y_true, y_pred, lambda_const),
+        loss=lambda y_true, y_pred: distill_fn(y_true, y_pred, lambda_const, temperature),
         metrics=[mf.accuracy, mf.top_5_accuracy, mf.categorical_crossentropy, soft_logloss]
     )
 
