@@ -54,15 +54,17 @@ val_generator = data_generator.flow_from_directory(
     batch_size=8
 )
 
-def distill(temperature = 5.0, lambda_const = 0.07):
+def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
     print('############# Temperature #############')
     print('#############     {} #############'.format(temperature))
     print('########################################')
     print('############# lambda_const #############')
     print('#############     {}  #############' .format(lambda_const))
     print('########################################')
-
-    model = miniXception(weight_decay=1e-5, num_residuals=0)
+    print('############# num_residuals #############')
+    print('#############     {}  #############' .format(num_residuals))
+    print('########################################')
+    model = miniXception(weight_decay=1e-5, num_residuals=num_residuals)
     # remove softmax
     model.layers.pop()
 
@@ -172,4 +174,5 @@ def distill(temperature = 5.0, lambda_const = 0.07):
 if __name__ == '__main__':
     temperature = float(sys.argv[1])
     lambda_const = float(sys.argv[2])
-    distill(temperature, lambda_const)
+    num_residuals = int(sys.argv[3])
+    distill(temperature, lambda_const,num_residuals)
