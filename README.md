@@ -19,6 +19,7 @@ https://arxiv.org/abs/1503.02531
 * python3 run_scripts.py
 ### Split the data
 * python3 split_but_no_resizing.py
+* python3 split_and_resize.py
 ### Get a new set of weights with the CalTech256 image data set
 * python3 train_xception.py
 ** This should also save several metric plots

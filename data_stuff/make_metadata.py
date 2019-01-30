@@ -2,8 +2,9 @@
 
 import os
 import constants as c
-import matplotlib.pyplot as plt
 from tqdm import tqdm
+from scipy import misc
+import matplotlib.pyplot as plt
 
 def make_metadata():
     sub_dirs = list(os.walk(c.dir_train))[1:]
@@ -19,7 +20,8 @@ def make_metadata():
             if not file_name.startswith('.'):
                 # read the image with matplotlib
                 image = plt.imread(os.path.join(dir_path, file_name))
-                # collect and store the image metadata
+
+                    # collect and store the image metadata
                 image_metadata = []
                 image_metadata.extend([dir_name, file_name])
                 image_metadata.extend(
@@ -31,3 +33,6 @@ def make_metadata():
                 train_metadata.append(image_metadata)
     #return the metadata
     return train_metadata
+
+if __name__ == '__main__':
+    make_metadata()

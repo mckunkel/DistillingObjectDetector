@@ -23,13 +23,13 @@ val = pd.read_csv('val_metadata.csv')
 
 if not os.path.isdir(data_dir + 'train'):
     os.mkdir(data_dir + 'train')
-for i in range(1, 257 + 1):
+for i in range(1, 256 + 1):
     if not os.path.isdir(data_dir + 'train/' + str(i)):
         os.mkdir(data_dir + 'train/' + str(i))
 
 if not os.path.isdir(data_dir + 'val'):
     os.mkdir(data_dir + 'val')
-for i in range(1, 257 + 1):
+for i in range(1, 256 + 1):
     if not os.path.isdir(data_dir + 'val/' + str(i)):
         os.mkdir(data_dir + 'val/' + str(i))
 
@@ -95,6 +95,7 @@ def enhance(image):
         image = enhancers[i](image, f)
     return image
 
+
 train_transform_rare = transforms.Compose([
     transforms.Scale(384, Image.LANCZOS),
     transforms.RandomCrop(299),
@@ -155,3 +156,4 @@ for i, row in tqdm(train.loc[train.channels == 1].iterrows()):
     new_image_name = str(i) + '_' + row.img_name
     save_path = os.path.join(data_dir, 'train', str(row.category_number), new_image_name)
     image.save(save_path, 'jpeg')
+
