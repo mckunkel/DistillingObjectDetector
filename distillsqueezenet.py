@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 
 from keras import optimizers
@@ -125,4 +126,9 @@ def distill(temperature=5.0, lambda_const=0.07):
 
     print("Saved model to disk")
     print(model.evaluate_generator(val_generator_no_shuffle, 80))
+
+if __name__ == '__main__':
+    _temperature = float(sys.argv[1])
+    _lambda_const = float(sys.argv[2])
+    distill(_temperature, _lambda_const)
 
