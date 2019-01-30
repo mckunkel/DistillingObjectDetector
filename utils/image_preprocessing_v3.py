@@ -96,7 +96,6 @@ def random_shear(x, intensity, row_axis=1, col_axis=2, channel_axis=0,
             (one of `{'constant', 'nearest', 'reflect', 'wrap'}`).
         cval: Value used for points outside the boundaries
             of the input if `mode='constant'`.
-
     # Returns
         Sheared Numpy image tensor.
     """
@@ -114,7 +113,6 @@ def random_shear(x, intensity, row_axis=1, col_axis=2, channel_axis=0,
 def random_zoom(x, zoom_range, row_axis=1, col_axis=2, channel_axis=0,
                 fill_mode='nearest', cval=0.):
     """Performs a random spatial zoom of a Numpy image tensor.
-
     # Arguments
         x: Input tensor. Must be 3D.
         zoom_range: Tuple of floats; zoom range for width and height.
@@ -126,10 +124,8 @@ def random_zoom(x, zoom_range, row_axis=1, col_axis=2, channel_axis=0,
             (one of `{'constant', 'nearest', 'reflect', 'wrap'}`).
         cval: Value used for points outside the boundaries
             of the input if `mode='constant'`.
-
     # Returns
         Zoomed Numpy image tensor.
-
     # Raises
         ValueError: if `zoom_range` isn't a tuple.
     """
@@ -176,7 +172,6 @@ def apply_transform(x,
                     fill_mode='nearest',
                     cval=0.):
     """Apply the image transformation specified by a matrix.
-
     # Arguments
         x: 2D numpy array, single image.
         transform_matrix: Numpy array specifying the geometric transformation.
@@ -186,7 +181,6 @@ def apply_transform(x,
             (one of `{'constant', 'nearest', 'reflect', 'wrap'}`).
         cval: Value used for points outside the boundaries
             of the input if `mode='constant'`.
-
     # Returns
         The transformed version of the input.
     """
@@ -214,16 +208,13 @@ def flip_axis(x, axis):
 
 def array_to_img(x, data_format=None, scale=True):
     """Converts a 3D Numpy array to a PIL Image instance.
-
     # Arguments
         x: Input Numpy array.
         data_format: Image data format.
         scale: Whether to rescale image values
             to be within [0, 255].
-
     # Returns
         A PIL Image instance.
-
     # Raises
         ImportError: if PIL is not available.
         ValueError: if invalid `x` or `data_format` is passed.
@@ -264,14 +255,11 @@ def array_to_img(x, data_format=None, scale=True):
 
 def img_to_array(img, data_format=None):
     """Converts a PIL Image instance to a Numpy array.
-
     # Arguments
         img: PIL Image instance.
         data_format: Image data format.
-
     # Returns
         A 3D Numpy array.
-
     # Raises
         ValueError: if invalid `img` or `data_format` is passed.
     """
@@ -298,16 +286,13 @@ def img_to_array(img, data_format=None):
 
 def load_img(path, grayscale=False, target_size=None):
     """Loads an image into PIL format.
-
     # Arguments
         path: Path to image file
         grayscale: Boolean, whether to load the image as grayscale.
         target_size: Either `None` (default to original size)
             or tuple of ints `(img_height, img_width)`.
-
     # Returns
         A PIL Image instance.
-
     # Raises
         ImportError: if PIL is not available.
     """
@@ -336,7 +321,6 @@ def list_pictures(directory, ext='jpg|jpeg|bmp|png'):
 
 class ImageDataGenerator(object):
     """Generate minibatches of image data with real-time data augmentation.
-
     # Arguments
         featurewise_center: set input mean to 0 over the dataset.
         samplewise_center: set each sample mean to 0.
@@ -476,10 +460,8 @@ class ImageDataGenerator(object):
 
     def standardize(self, x):
         """Apply the normalization configuration to a batch of inputs.
-
         # Arguments
             x: batch of inputs to be normalized.
-
         # Returns
             The inputs, normalized.
         """
@@ -524,11 +506,9 @@ class ImageDataGenerator(object):
 
     def random_transform(self, x, seed=None):
         """Randomly augment a single image tensor.
-
         # Arguments
             x: 3D tensor, single image.
             seed: random seed.
-
         # Returns
             A randomly transformed version of the input (same shape).
         """
@@ -617,10 +597,8 @@ class ImageDataGenerator(object):
             rounds=1,
             seed=None):
         """Fits internal statistics to some sample data.
-
         Required for featurewise_center, featurewise_std_normalization
         and zca_whitening.
-
         # Arguments
             x: Numpy array, the data to fit on. Should have rank 4.
                 In case of grayscale data,
@@ -630,7 +608,6 @@ class ImageDataGenerator(object):
             rounds: If `augment`,
                 how many augmentation passes to do over the data
             seed: random seed.
-
         # Raises
             ValueError: in case of invalid input `x`.
         """
@@ -681,7 +658,6 @@ class ImageDataGenerator(object):
 
 class Iterator(object):
     """Abstract base class for image data iterators.
-
     # Arguments
         n: Integer, total number of samples in the dataset to loop over.
         batch_size: Integer, size of a batch.
@@ -734,7 +710,6 @@ class Iterator(object):
 
 class NumpyArrayIterator(Iterator):
     """Iterator yielding data from a Numpy array.
-
     # Arguments
         x: Numpy array of input data.
         y: Numpy array of targets data.
@@ -793,7 +768,6 @@ class NumpyArrayIterator(Iterator):
 
     def next(self):
         """For python 2.x.
-
         # Returns
             The next batch.
         """
@@ -825,12 +799,10 @@ class NumpyArrayIterator(Iterator):
 
 def _count_valid_files_in_directory(directory, white_list_formats, follow_links):
     """Count files with extension in `white_list_formats` contained in a directory.
-
     # Arguments
         directory: absolute path to the directory containing files to be counted
         white_list_formats: set of strings containing allowed extensions for
             the files to be counted.
-
     # Returns
         the count of files with extension in `white_list_formats` contained in
         the directory.
@@ -854,14 +826,12 @@ def _count_valid_files_in_directory(directory, white_list_formats, follow_links)
 def _list_valid_filenames_in_directory(directory, white_list_formats,
                                        class_indices, follow_links):
     """List paths of files in `subdir` relative from `directory` whose extensions are in `white_list_formats`.
-
     # Arguments
         directory: absolute path to a directory containing the files to list.
             The directory name is used as class label and must be a key of `class_indices`.
         white_list_formats: set of strings containing allowed extensions for
             the files to be counted.
         class_indices: dictionary mapping a class name to its index.
-
     # Returns
         classes: a list of class indices
         filenames: the path of valid files in `directory`, relative from
@@ -892,7 +862,6 @@ def _list_valid_filenames_in_directory(directory, white_list_formats,
 
 class DirectoryIterator(Iterator):
     """Iterator capable of reading images from a directory on disk.
-
     # Arguments
         directory: Path to the directory to read images from.
             Each subdirectory in this directory will be
@@ -1014,7 +983,6 @@ class DirectoryIterator(Iterator):
 
     def next(self):
         """For python 2.x.
-
         # Returns
             The next batch.
         """
