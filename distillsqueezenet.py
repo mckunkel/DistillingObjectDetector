@@ -12,15 +12,15 @@ from utils.image_preprocessing_v2 import ImageDataGenerator
 from keras.models import Model
 from keras.layers import Lambda, concatenate, Activation
 from keras.losses import categorical_crossentropy as logloss
-from keras.metrics import categorical_accuracy, top_k_categorical_accuracy
 from keras import backend as K
 
 from models.squeezenet import SqueezeNet, preprocess_input
-
-import matplotlib.pyplot as plt
 import constants as c
 from utils.knowledge_distallion_loss_fn import knowledge_distillation_loss as distill_fn
 import utils.metric_functions as mf
+import utils.plot_utils as plot_utils
+import utils.history_utils as history_utils
+import utils.save_utils as save_utils
 
 data_dir = c.data_dir
 
@@ -87,32 +87,15 @@ def distill(temperature=5.0, lambda_const=0.07):
         steps_per_epoch=40, epochs=30, verbose=1,
         callbacks=[
             EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
-            ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, epsilon=0.007)
+            ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, min_delta=0.007)
         ],
         validation_data=val_generator, validation_steps=80, workers=4
     )
 
-    # metric plots
-    plt.plot(model.history.history['categorical_crossentropy'], label='train')
-    plt.plot(model.history.history['val_categorical_crossentropy'], label='val')
-    plt.legend()
-    plt.xlabel('epoch')
-    plt.ylabel('logloss')
-    plt.savefig('student_logloss_vs_epoch.png')
+    plot_utils(model,'squeezenet',temperature, lambda_const)
+    history_utils(model,'squeezenet',temperature, lambda_const)
+    save_utils(model,'squeezenet',temperature, lambda_const)
 
-    plt.plot(model.history.history['accuracy'], label='train')
-    plt.plot(model.history.history['val_accuracy'], label='val')
-    plt.legend()
-    plt.xlabel('epoch')
-    plt.ylabel('accuracy')
-    plt.savefig('student_accuracy_vs_epoch.png')
-
-    plt.plot(model.history.history['top_5_accuracy'], label='train')
-    plt.plot(model.history.history['val_top_5_accuracy'], label='val')
-    plt.legend()
-    plt.xlabel('epoch')
-    plt.ylabel('top5_accuracy')
-    plt.savefig('student_top5_accuracy_vs_epoch.png')
 
     val_generator_no_shuffle = data_generator.flow_from_directory(
         data_dir + 'val', val_logits,
@@ -120,18 +103,7 @@ def distill(temperature=5.0, lambda_const=0.07):
         batch_size=64, shuffle=False
     )
 
-    # serialize model to JSON
-    model_json = model.to_json()
-    with open("distilledSqueezeNet_model_T_{}_lambda_{}.json".format(temperature, lambda_const), "w") as json_file:
-        json_file.write(model_json)
-    # serialize model to YAML
-    model_yaml = model.to_yaml()
-    with open("distilledSqueezeNet_model_T_{}_lambda_{}.yaml".format(temperature, lambda_const), "w") as yaml_file:
-        yaml_file.write(model_yaml)
-    # serialize weights to HDF5
-    model.save_weights("distilledSqueezeNet_model_T_{}_lambda_{}.h5".format(temperature, lambda_const))
 
-    print("Saved model to disk")
     print(model.evaluate_generator(val_generator_no_shuffle, 80))
 
 if __name__ == '__main__':
