@@ -67,7 +67,7 @@ def distill(temperature=5.0, lambda_const=0.07):
     output = concatenate([probabilities, probabilities_T])
     model = Model(model.input, output)
 
-    lambda_const = 0.2
+    #lambda_const = 0.2
 
     model.compile(
         optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
