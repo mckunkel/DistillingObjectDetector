@@ -1,6 +1,5 @@
 import numpy as np
 import sys
-sys.path.append('utils/')
 
 import keras
 from keras import optimizers
