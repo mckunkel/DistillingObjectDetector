@@ -5,6 +5,8 @@ data_stuff/train/*
 data_stuff/train_no_resizing/*
 data_stuff/val/*
 data_stuff/val_no_resizing/*
+data_stuff/*.csv
+data_stuff/*.npy
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

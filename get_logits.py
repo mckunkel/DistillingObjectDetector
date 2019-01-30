@@ -19,13 +19,13 @@ data_generator = ImageDataGenerator(
 )
 
 train_generator = data_generator.flow_from_directory(
-    data_dir + 'train_no_resizing',
+    data_dir + 'train',
     target_size=(299, 299),
     batch_size=64, shuffle=False
 )
 
 val_generator = data_generator.flow_from_directory(
-    data_dir + 'val_no_resizing',
+    data_dir + 'val',
     target_size=(299, 299),
     batch_size=64, shuffle=False
 )
@@ -49,7 +49,7 @@ for x_batch, _, name_batch in tqdm(train_generator):
         train_logits[n] = batch_logits[i]
 
     batches += 1
-    if batches >= 400:  # 25600/64
+    if batches >= 400:
         break
 
 batches = 0

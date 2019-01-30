@@ -26,33 +26,34 @@ train_logits = np.load(data_dir + 'train_logits.npy')[()]
 val_logits = np.load(data_dir + 'val_logits.npy')[()]
 
 data_generator = ImageDataGenerator(
-    rotation_range=30,
-    zoom_range=0.3,
-    horizontal_flip=True,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.001,
-    channel_shift_range=0.1,
-    fill_mode='reflect',
-    data_format='channels_last',
-    preprocessing_function=preprocess_input
-
+    # rotation_range=30,
+    # zoom_range=0.3,
+    # horizontal_flip=True,
+    # width_shift_range=0.2,
+    # height_shift_range=0.2,
+    # shear_range=0.001,
+    # channel_shift_range=0.1,
+    # fill_mode='reflect',
     # data_format='channels_last',
     # preprocessing_function=preprocess_input
+
+    data_format='channels_last',
+    preprocessing_function=preprocess_input
 )
 
 # note: i'm also passing dicts of logits
 train_generator = data_generator.flow_from_directory(
-    data_dir + 'train_no_resizing', train_logits,
+    data_dir + 'train', train_logits,
     target_size=(299, 299),
-    batch_size=16
+    batch_size=64
 )
 
 val_generator = data_generator.flow_from_directory(
-    data_dir + 'val_no_resizing', val_logits,
+    data_dir + 'val', val_logits,
     target_size=(299, 299),
-    batch_size=8
+    batch_size=64
 )
+
 
 def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
     print('############# Temperature #############')
@@ -96,7 +97,7 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
         #    probabilities made softer with temperature
         y_pred, y_pred_soft = y_pred[:, :256], y_pred[:, 256:]
 
-        return lambda_const * logloss(y_true, y_pred) + logloss(y_soft, y_pred_soft)
+        return lambda_const * logloss(y_true, y_pred) + logloss(y_soft, y_pred_soft)*temperature
 
     # For testing use usual output probabilities (without temperature)
 
@@ -172,7 +173,7 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
 
 
 if __name__ == '__main__':
-    temperature = float(sys.argv[1])
-    lambda_const = float(sys.argv[2])
-    num_residuals = int(sys.argv[3])
-    distill(temperature, lambda_const,num_residuals)
+    _temperature = float(sys.argv[1])
+    _lambda_const = float(sys.argv[2])
+    _num_residuals = int(sys.argv[3])
+    distill(_temperature, _lambda_const, _num_residuals)
