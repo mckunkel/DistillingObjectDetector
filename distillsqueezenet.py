@@ -84,7 +84,7 @@ def distill(temperature=5.0, lambda_const=0.07):
 
     model.fit_generator(
         train_generator,
-        steps_per_epoch=40, epochs=40, verbose=0,
+        steps_per_epoch=40, epochs=40, verbose=1,
         callbacks=[
             EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
             ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, min_delta=0.007)
