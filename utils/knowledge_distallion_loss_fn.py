@@ -1,4 +1,5 @@
 from keras.losses import categorical_crossentropy as logloss
+from keras import backend as K
 
 
 def knowledge_distillation_loss(y_true, y_pred, lambda_const,temperature):
