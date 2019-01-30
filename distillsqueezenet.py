@@ -17,8 +17,8 @@ from keras import backend as K
 from models.squeezenet import SqueezeNet, preprocess_input
 
 import matplotlib.pyplot as plt
-import  constants as c
-import utils.knowledge_distallion_loss_fn.knowledge_distillation_loss as distill_fn
+import constants as c
+from utils.knowledge_distallion_loss_fn import knowledge_distillation_loss as distill_fn
 import utils.metric_functions as mf
 
 data_dir = c.data_dir
