@@ -72,14 +72,14 @@ def knowledge_distillation_loss(y_true, y_pred, lambda_const):
     y_true, logits = y_true[:, :256], y_true[:, 256:]
 
     # convert logits to soft targets
-    y_soft = K.softmax(logits / temperature)
+    y_soft = K.softmax(logits / temperature)*temperature
 
     # split in
     #    usual output probabilities
     #    probabilities made softer with temperature
     y_pred, y_pred_soft = y_pred[:, :256], y_pred[:, 256:]
 
-    return lambda_const * logloss(y_true, y_pred) + logloss(y_soft, y_pred_soft)*temperature
+    return lambda_const * logloss(y_true, y_pred) + logloss(y_soft, y_pred_soft)
 
 def accuracy(y_true, y_pred):
     y_true = y_true[:, :256]

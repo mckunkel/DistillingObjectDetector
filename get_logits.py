@@ -17,14 +17,17 @@ data_generator = ImageDataGenerator(
     data_format='channels_last',
     preprocessing_function=preprocess_input
 )
-
+data_generator2 = ImageDataGenerator(
+    data_format='channels_last',
+    preprocessing_function=preprocess_input
+)
 train_generator = data_generator.flow_from_directory(
     data_dir + 'train',
     target_size=(299, 299),
     batch_size=64, shuffle=False
 )
 
-val_generator = data_generator.flow_from_directory(
+val_generator = data_generator2.flow_from_directory(
     data_dir + 'val',
     target_size=(299, 299),
     batch_size=64, shuffle=False
@@ -63,7 +66,7 @@ for x_batch, _, name_batch in tqdm(val_generator):
         val_logits[n] = batch_logits[i]
 
     batches += 1
-    if batches >= 80:  # 5120/64
+    if batches >= 400:
         break
 
 
