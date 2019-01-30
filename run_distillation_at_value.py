@@ -1,4 +1,4 @@
-import distillsqueezenet as ds
+from distillsqueezenet import distill as ds
 
 temps=[2.5, 5, 10, 15]
 lamdas=[0.02, 0.2, 0.5, 1]
