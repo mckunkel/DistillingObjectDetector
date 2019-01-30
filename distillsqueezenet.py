@@ -1,7 +1,5 @@
 import numpy as np
-import sys
 
-import keras
 from keras import optimizers
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping
 
@@ -20,6 +18,8 @@ from models.squeezenet import SqueezeNet, preprocess_input
 
 import matplotlib.pyplot as plt
 import  constants as c
+import utils.knowledge_distallion_loss_fn.knowledge_distillation_loss as distill_fn
+import utils.metric_functions as mf
 
 data_dir = c.data_dir
 
@@ -32,7 +32,10 @@ data_generator = ImageDataGenerator(
     data_format='channels_last',
     preprocessing_function=preprocess_input
 )
-
+data_generator2 = ImageDataGenerator(
+    data_format='channels_last',
+    preprocessing_function=preprocess_input
+)
 # note: i'm also passing dicts of logits
 train_generator = data_generator.flow_from_directory(
     data_dir + 'train', train_logits,
@@ -40,115 +43,86 @@ train_generator = data_generator.flow_from_directory(
     batch_size=64
 )
 
-val_generator = data_generator.flow_from_directory(
+val_generator = data_generator2.flow_from_directory(
     data_dir + 'val', val_logits,
     target_size=(299, 299),
     batch_size=64
 )
 
-temperature = 5.0
+def distill(temperature=5.0, lambda_const=0.07):
+    model = SqueezeNet(weight_decay=1e-4, image_size=299)
 
-model = SqueezeNet(weight_decay=1e-4, image_size=299)
+    # remove softmax
+    model.layers.pop()
 
-# remove softmax
-model.layers.pop()
+    # usual probabilities
+    logits = model.layers[-1].output
+    probabilities = Activation('softmax')(logits)
 
-# usual probabilities
-logits = model.layers[-1].output
-probabilities = Activation('softmax')(logits)
+    # softed probabilities
+    logits_T = Lambda(lambda x: x / temperature)(logits)
+    probabilities_T = Activation('softmax')(logits_T)
 
-# softed probabilities
-logits_T = Lambda(lambda x: x/temperature)(logits)
-probabilities_T = Activation('softmax')(logits_T)
+    output = concatenate([probabilities, probabilities_T])
+    model = Model(model.input, output)
 
-output = concatenate([probabilities, probabilities_T])
-model = Model(model.input, output)
+    lambda_const = 0.2
 
+    model.compile(
+        optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
+        loss=lambda y_true, y_pred: distill_fn(y_true, y_pred, lambda_const),
+        metrics=[mf.accuracy, mf.top_5_accuracy, mf.categorical_crossentropy, mf.soft_logloss(temperature=temperature)]
+    )
 
-def knowledge_distillation_loss(y_true, y_pred, lambda_const):
-    # split in
-    #    onehot hard true targets
-    #    logits from xception
-    y_true, logits = y_true[:, :256], y_true[:, 256:]
+    model.fit_generator(
+        train_generator,
+        steps_per_epoch=40, epochs=30, verbose=1,
+        callbacks=[
+            EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
+            ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, epsilon=0.007)
+        ],
+        validation_data=val_generator, validation_steps=80, workers=4
+    )
 
-    # convert logits to soft targets
-    y_soft = K.softmax(logits / temperature)*temperature
+    # metric plots
+    plt.plot(model.history.history['categorical_crossentropy'], label='train')
+    plt.plot(model.history.history['val_categorical_crossentropy'], label='val')
+    plt.legend()
+    plt.xlabel('epoch')
+    plt.ylabel('logloss')
+    plt.savefig('student_logloss_vs_epoch.png')
 
-    # split in
-    #    usual output probabilities
-    #    probabilities made softer with temperature
-    y_pred, y_pred_soft = y_pred[:, :256], y_pred[:, 256:]
+    plt.plot(model.history.history['accuracy'], label='train')
+    plt.plot(model.history.history['val_accuracy'], label='val')
+    plt.legend()
+    plt.xlabel('epoch')
+    plt.ylabel('accuracy')
+    plt.savefig('student_accuracy_vs_epoch.png')
 
-    return lambda_const * logloss(y_true, y_pred) + logloss(y_soft, y_pred_soft)
+    plt.plot(model.history.history['top_5_accuracy'], label='train')
+    plt.plot(model.history.history['val_top_5_accuracy'], label='val')
+    plt.legend()
+    plt.xlabel('epoch')
+    plt.ylabel('top5_accuracy')
+    plt.savefig('student_top5_accuracy_vs_epoch.png')
 
-def accuracy(y_true, y_pred):
-    y_true = y_true[:, :256]
-    y_pred = y_pred[:, :256]
-    return categorical_accuracy(y_true, y_pred)
+    val_generator_no_shuffle = data_generator.flow_from_directory(
+        data_dir + 'val', val_logits,
+        target_size=(299, 299),
+        batch_size=64, shuffle=False
+    )
 
-def top_5_accuracy(y_true, y_pred):
-    y_true = y_true[:, :256]
-    y_pred = y_pred[:, :256]
-    return top_k_categorical_accuracy(y_true, y_pred)
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open("distilledSqueezeNet_model_T_{}_lambda_{}.json".format(temperature, lambda_const), "w") as json_file:
+        json_file.write(model_json)
+    # serialize model to YAML
+    model_yaml = model.to_yaml()
+    with open("distilledSqueezeNet_model_T_{}_lambda_{}.yaml".format(temperature, lambda_const), "w") as yaml_file:
+        yaml_file.write(model_yaml)
+    # serialize weights to HDF5
+    model.save_weights("distilledSqueezeNet_model_T_{}_lambda_{}.h5".format(temperature, lambda_const))
 
-def categorical_crossentropy(y_true, y_pred):
-    y_true = y_true[:, :256]
-    y_pred = y_pred[:, :256]
-    return logloss(y_true, y_pred)
+    print("Saved model to disk")
+    print(model.evaluate_generator(val_generator_no_shuffle, 80))
 
-
-
-# logloss with only soft probabilities and targets
-def soft_logloss(y_true, y_pred):
-    logits = y_true[:, 256:]
-    y_soft = K.softmax(logits/temperature)
-    y_pred_soft = y_pred[:, 256:]
-    return logloss(y_soft, y_pred_soft)
-
-lambda_const = 0.2
-
-model.compile(
-    optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
-    loss=lambda y_true, y_pred: knowledge_distillation_loss(y_true, y_pred, lambda_const),
-    metrics=[accuracy, top_5_accuracy, categorical_crossentropy, soft_logloss]
-)
-
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=40, epochs=30, verbose=1,
-    callbacks=[
-        EarlyStopping(monitor='val_accuracy', patience=4, min_delta=0.01),
-        ReduceLROnPlateau(monitor='val_accuracy', factor=0.1, patience=2, epsilon=0.007)
-    ],
-    validation_data=val_generator, validation_steps=80, workers=4
-)
-
-# metric plots
-plt.plot(model.history.history['categorical_crossentropy'], label='train')
-plt.plot(model.history.history['val_categorical_crossentropy'], label='val')
-plt.legend()
-plt.xlabel('epoch')
-plt.ylabel('logloss')
-plt.savefig('student_logloss_vs_epoch.png')
-
-plt.plot(model.history.history['acc'], label='train')
-plt.plot(model.history.history['val_acc'], label='val')
-plt.legend()
-plt.xlabel('epoch')
-plt.ylabel('accuracy')
-plt.savefig('student_accuracy_vs_epoch.png')
-
-plt.plot(model.history.history['top_5_accuracy'], label='train')
-plt.plot(model.history.history['val_top_5_accuracy'], label='val')
-plt.legend()
-plt.xlabel('epoch')
-plt.ylabel('top5_accuracy')
-plt.savefig('student_top5_accuracy_vs_epoch.png')
-
-val_generator_no_shuffle = data_generator.flow_from_directory(
-    data_dir + 'val', val_logits,
-    target_size=(299, 299),
-    batch_size=64, shuffle=False
-)
-
-print(model.evaluate_generator(val_generator_no_shuffle, 80))

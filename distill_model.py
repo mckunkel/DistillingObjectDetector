@@ -182,7 +182,19 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
         target_size=(299, 299),
         batch_size=16, shuffle=False
     )
-    model.save_weights('miniXception_weights.hdf5')
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open("distilledSqueezeNet_model_T_{}_lambda_{}.json".format(temperature, lambda_const), "w") as json_file:
+        json_file.write(model_json)
+    # serialize model to YAML
+    model_yaml = model.to_yaml()
+    with open("distilledSqueezeNet_model_T_{}_lambda_{}.yaml".format(temperature, lambda_const), "w") as yaml_file:
+        yaml_file.write(model_yaml)
+    # serialize weights to HDF5
+    model.save_weights("distilledSqueezeNet_model_T_{}_lambda_{}.hdf5".format(temperature, lambda_const))
+
+    # print("Saved model to disk")
+    # model.save_weights('miniXception_weights.hdf5')
     print(model.evaluate_generator(val_generator_no_shuffle, 80))
 
 
