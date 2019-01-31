@@ -109,8 +109,8 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
         train_generator,
         steps_per_epoch=4, epochs=3, verbose=1,
         callbacks=[
-            ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=2, min_delta=0.007),
-            EarlyStopping(monitor='val_acc', patience=4, min_delta=0.01)
+            EarlyStopping(monitor='val_acc', patience=10, min_delta=0.01),
+            ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, min_delta=0.007)
         ],
         validation_data=val_generator, validation_steps=80, workers=4
     )
