@@ -66,13 +66,13 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
     train_generator = data_generator.flow_from_directory(
         data_dir + 'train', train_logits,
         target_size=(299, 299),
-        batch_size=32
+        batch_size=16
     )
 
     val_generator = data_generator2.flow_from_directory(
         data_dir + 'val', val_logits,
         target_size=(299, 299),
-        batch_size=32
+        batch_size=16
     )
 
     model = miniXception(weight_decay=1e-5, num_residuals=num_residuals)
@@ -107,7 +107,7 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
 
     model.fit_generator(
         train_generator,
-        steps_per_epoch=4, epochs=3, verbose=1,
+        steps_per_epoch=40, epochs=300, verbose=1,
         callbacks=[
             EarlyStopping(monitor='val_acc', patience=10, min_delta=0.01),
             ReduceLROnPlateau(monitor='val_acc', factor=0.1, patience=5, min_delta=0.007)
