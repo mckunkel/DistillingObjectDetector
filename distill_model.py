@@ -24,43 +24,6 @@ import matplotlib.pyplot as plt
 
 import constants as c
 
-data_dir = c.data_dir
-
-train_logits = np.load(data_dir + 'train_logits.npy')[()]
-val_logits = np.load(data_dir + 'val_logits.npy')[()]
-
-data_generator = ImageDataGenerator(
-    rotation_range=30,
-    zoom_range=0.3,
-    horizontal_flip=True,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.001,
-    channel_shift_range=0.1,
-    fill_mode='reflect',
-    # data_format='channels_last',
-    # preprocessing_function=preprocess_input
-
-    data_format='channels_last',
-    preprocessing_function=preprocess_input
-)
-data_generator2 = ImageDataGenerator(
-
-    data_format='channels_last',
-    preprocessing_function=preprocess_input
-)
-# note: i'm also passing dicts of logits
-train_generator = data_generator.flow_from_directory(
-    data_dir + 'train', train_logits,
-    target_size=(299, 299),
-    batch_size=32
-)
-
-val_generator = data_generator2.flow_from_directory(
-    data_dir + 'val', val_logits,
-    target_size=(299, 299),
-    batch_size=32
-)
 
 
 def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
@@ -73,6 +36,45 @@ def distill(temperature = 5.0, lambda_const = 0.07, num_residuals = 0):
     print('############# num_residuals #############')
     print('#############     {}  #############' .format(num_residuals))
     print('########################################')
+
+    data_dir = c.data_dir
+
+    train_logits = np.load(data_dir + 'train_logits.npy')[()]
+    val_logits = np.load(data_dir + 'val_logits.npy')[()]
+
+    data_generator = ImageDataGenerator(
+        rotation_range=30,
+        zoom_range=0.3,
+        horizontal_flip=True,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.001,
+        channel_shift_range=0.1,
+        fill_mode='reflect',
+        # data_format='channels_last',
+        # preprocessing_function=preprocess_input
+
+        data_format='channels_last',
+        preprocessing_function=preprocess_input
+    )
+    data_generator2 = ImageDataGenerator(
+
+        data_format='channels_last',
+        preprocessing_function=preprocess_input
+    )
+    # note: i'm also passing dicts of logits
+    train_generator = data_generator.flow_from_directory(
+        data_dir + 'train', train_logits,
+        target_size=(299, 299),
+        batch_size=32
+    )
+
+    val_generator = data_generator2.flow_from_directory(
+        data_dir + 'val', val_logits,
+        target_size=(299, 299),
+        batch_size=32
+    )
+
     model = miniXception(weight_decay=1e-5, num_residuals=num_residuals)
     # remove softmax
     model.layers.pop()

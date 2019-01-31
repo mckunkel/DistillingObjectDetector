@@ -22,35 +22,41 @@ from utils.plot_utils import plot_utils as plt_uts
 from utils.history_utils import history_utils as hist_uts
 from utils.save_utils import save_utils as save_uts
 
-data_dir = c.data_dir
-
-
-
-train_logits = np.load(data_dir + 'train_logits.npy')[()]
-val_logits = np.load(data_dir + 'val_logits.npy')[()]
-
-data_generator = ImageDataGenerator(
-    data_format='channels_last',
-    preprocessing_function=preprocess_input
-)
-data_generator2 = ImageDataGenerator(
-    data_format='channels_last',
-    preprocessing_function=preprocess_input
-)
-# note: i'm also passing dicts of logits
-train_generator = data_generator.flow_from_directory(
-    data_dir + 'train', train_logits,
-    target_size=(299, 299),
-    batch_size=64
-)
-
-val_generator = data_generator2.flow_from_directory(
-    data_dir + 'val', val_logits,
-    target_size=(299, 299),
-    batch_size=64
-)
-
 def distill(temperature=5.0, lambda_const=0.07):
+
+    print('############# Temperature #############')
+    print('#############     {} #############'.format(temperature))
+    print('########################################')
+    print('############# lambda_const #############')
+    print('#############     {}  #############' .format(lambda_const))
+    print('########################################')
+
+    data_dir = c.data_dir
+
+    train_logits = np.load(data_dir + 'train_logits.npy')[()]
+    val_logits = np.load(data_dir + 'val_logits.npy')[()]
+
+    data_generator = ImageDataGenerator(
+        data_format='channels_last',
+        preprocessing_function=preprocess_input
+    )
+    data_generator2 = ImageDataGenerator(
+        data_format='channels_last',
+        preprocessing_function=preprocess_input
+    )
+    # note: i'm also passing dicts of logits
+    train_generator = data_generator.flow_from_directory(
+        data_dir + 'train', train_logits,
+        target_size=(299, 299),
+        batch_size=64
+    )
+
+    val_generator = data_generator2.flow_from_directory(
+        data_dir + 'val', val_logits,
+        target_size=(299, 299),
+        batch_size=64
+    )
+
     model = SqueezeNet(weight_decay=1e-4, image_size=299)
 
     # remove softmax
