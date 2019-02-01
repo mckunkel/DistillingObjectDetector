@@ -26,6 +26,7 @@ def distill_Xception(part):
         list3 = [(x, y, z) for x in temps for y in lamdas for z in residuals]
         for temperature, lambda_constant, residual in list3:
             if check_file('miniXception',temperature, lambda_constant, residual):
+                print('File exists already. Will not redo')
                 continue
             dsXcept(temperature, lambda_constant, residual)
     elif part == 2:
@@ -35,6 +36,7 @@ def distill_Xception(part):
         list3 = [(x, y, z) for x in temps for y in lamdas for z in residuals]
         for temperature, lambda_constant, residual in list3:
             if check_file('miniXception',temperature, lambda_constant, residual):
+                print('File exists already. Will not redo')
                 continue
             dsXcept(temperature, lambda_constant, residual)
 
