@@ -39,6 +39,8 @@ def distill_Xception(part):
                 print('File exists already. Will not redo')
                 continue
             dsXcept(temperature, lambda_constant, residual)
+    else:
+        print('The value {} is not valid please choose 1 or 2'.format(part))
 
 
 
