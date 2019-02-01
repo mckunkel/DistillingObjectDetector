@@ -7,6 +7,9 @@ data_stuff/val/*
 data_stuff/val_no_resizing/*
 data_stuff/*.csv
 data_stuff/*.npy
+*.npy
+*.png
+*.h5
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
