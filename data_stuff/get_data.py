@@ -39,3 +39,6 @@ def run_data_checker():
         print('Downloading the .tar file')
         dl.get_data()
         untar(c.file_train)
+
+if __name__ == '__main__':
+    run_data_checker()

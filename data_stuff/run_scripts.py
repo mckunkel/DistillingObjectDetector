@@ -1,6 +1,6 @@
 from get_data import run_data_checker
 from clean_data import clean_data
-from split_save_data import  run_package
+from split_save_data import run_package
 
 #in this order
 # 1. Check if data exists. If not get data
