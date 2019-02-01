@@ -1,7 +1,7 @@
 import sys
 from distillsqueezenet import distill as ds
 from distill_model import distill as dsXcept
-from utils import check_file_exists as check_file
+from utils.check_file_exists import check_utils as check_file
 
 def run(type, part):
     if type == 'squeeze':
