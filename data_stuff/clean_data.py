@@ -1,6 +1,6 @@
 #Cleans the CalTech256 data set
 import shutil
-import constants as c
+import data_constants as c
 import os
 
 
