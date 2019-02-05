@@ -61,10 +61,13 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
 
     input_model = load_model(model_path)
     #model = load_model('models/student_squeezenet.hdf5')
+    print(input_model.summary())
 
 
     # remove softmax
     input_model.layers.pop()
+    print('###################')
+    print(input_model.summary())
 
     # usual probabilities
     logits = input_model.layers[-1].output
