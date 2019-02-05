@@ -120,8 +120,6 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
 if __name__ == '__main__':
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-d", "--dataset", type=str, required=True,
-                    help="path dataset of input images")
     ap.add_argument("-t", "--temperature", type=float, required=True,
                     help="temperature for the softmax function")
     ap.add_argument("-l", "--lambda", type=float, required=True,
@@ -135,5 +133,5 @@ if __name__ == '__main__':
     ap.add_argument("-r", "--retrain", type=bool, default=False,
                     help="path to output loss/accuracy plot")
     args = vars(ap.parse_args())
-    print('Here is what was the input args["dataset"] = {},  args["model"]= {}'.format(args["dataset"], args["student_model"]))
+    print('Here is what was the input args["temperature"] = {},  args["model"]= {}'.format(args["temperature"], args["student_model"]))
     distill(args["temperature"], args["lambda"])
