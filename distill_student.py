@@ -69,7 +69,7 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
     # usual probabilities
     logits = input_model.layers[-1].output
     probabilities = Activation('softmax')(logits)
-    probabilities.name = probabilities.name +  str("original")
+    #probabilities.name = probabilities.name +  str("original")
 
     # softed probabilities
     logits_T = Lambda(lambda x: x / temperature)(logits)
