@@ -91,3 +91,7 @@ def SqueezeNet(weight_decay, image_size=224):
 
 
     return model
+
+if __name__ == '__main__':
+    model = SqueezeNet(weight_decay=1e-4, image_size=299)
+    model.save("student_squeezenet.hdf5")
