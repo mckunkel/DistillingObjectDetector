@@ -10,9 +10,10 @@ def run(type, part):
         distill_Xception(part)
 
 def distill_squeeze():
-    temps = [2.5, 5, 10, 15]
-    lamdas = [0.02, 0.2, 0.5, 1]
-
+    # temps = [2.5, 5, 10, 15]
+    # lamdas = [0.02, 0.2, 0.5, 1]
+    temps = [5]
+    lamdas = [0.5]
     list3 = [(x, y) for x in temps for y in lamdas]
 
     for temperature, lambda_constant in list3:
