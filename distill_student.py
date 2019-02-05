@@ -60,6 +60,10 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
     )
 
     input_model = load_model(model_path)
+    model2 = load_model(model_path)
+    for layer in model2.layers:
+        layer.name = layer.name + str("_2")
+
     #model = load_model('models/student_squeezenet.hdf5')
     print(input_model.summary())
 
@@ -79,7 +83,7 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
     probabilities_T = Activation('softmax')(logits_T)
 
     output = concatenate([probabilities, probabilities_T])
-    model = Model(input_model.input, output)
+    model = Model(model2.input, output)
     print(model.summary())
     #lambda_const = 0.2
 
