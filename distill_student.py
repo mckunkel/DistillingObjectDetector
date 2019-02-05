@@ -59,8 +59,8 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
         batch_size=64
     )
 
-    #model = load_model(model_path)
-    model = load_model('models/student_squeezenet.hdf5')
+    model = load_model(model_path)
+    #model = load_model('models/student_squeezenet.hdf5')
 
 
     # remove softmax
@@ -136,4 +136,4 @@ if __name__ == '__main__':
                     help="path to output loss/accuracy plot")
     args = vars(ap.parse_args())
     print('Here is what was the input args["temperature"] = {},  args["model"]= {}'.format(args["temperature"], args["student_model"]))
-    distill(args["temperature"], args["lambda"])
+    distill(args["temperature"], args["lambda"], args["student_model"], args["save_name"])
