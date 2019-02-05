@@ -59,15 +59,15 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
         batch_size=64
     )
 
-    model = load_model(model_path)
+    input_model = load_model(model_path)
     #model = load_model('models/student_squeezenet.hdf5')
 
 
     # remove softmax
-    model.layers.pop()
+    input_model.layers.pop()
 
     # usual probabilities
-    logits = model.layers[-1].output
+    logits = input_model.layers[-1].output
     probabilities = Activation('softmax')(logits)
 
     # softed probabilities
@@ -75,7 +75,7 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
     probabilities_T = Activation('softmax')(logits_T)
 
     output = concatenate([probabilities, probabilities_T])
-    model = Model(model.input, output)
+    model = Model(input_model.input, output)
 
     #lambda_const = 0.2
 
@@ -114,7 +114,6 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
         target_size=(299, 299),
         batch_size=64, shuffle=False
     )
-
 
     print(model.evaluate_generator(val_generator_no_shuffle, 80))
 
