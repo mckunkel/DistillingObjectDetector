@@ -76,7 +76,7 @@ def distill(temperature=5.0, lambda_const=0.07, model_path='', save_name=''):
 
     output = concatenate([probabilities, probabilities_T])
     model = Model(input_model.input, output)
-
+    print(model.summary())
     #lambda_const = 0.2
 
     # logloss with only soft probabilities and targets
