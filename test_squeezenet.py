@@ -30,11 +30,11 @@ val_generator = data_generator.flow_from_directory(
 model = SqueezeNet(weight_decay=1e-4, image_size=299)
 model.count_params()
 orig_stdout = sys.stdout
-f = open('modelSummary.txt', 'w')
-sys.stdout = f
-print(model.summary())
-sys.stdout = orig_stdout
-f.close()
+# f = open('modelSummary.txt', 'w')
+# sys.stdout = f
+# print(model.summary())
+# sys.stdout = orig_stdout
+# f.close()
 model.compile(
     optimizer=optimizers.SGD(lr=1e-2, momentum=0.9, nesterov=True),
     loss='categorical_crossentropy', metrics=['accuracy', 'top_k_categorical_accuracy']
