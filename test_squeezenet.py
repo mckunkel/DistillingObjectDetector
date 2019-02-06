@@ -50,8 +50,8 @@ model.fit_generator(
     validation_data=val_generator, validation_steps=80, workers=4
 )
 
-plt_uts(model, 'Originalsqueezenet', 0, 0)
+#plt_uts(model, 'Originalsqueezenet', 0, 0)
 
-hist_uts(model, 'Originalsqueezenet', 0, 0)
+#hist_uts(model, 'Originalsqueezenet', 0, 0)
 
 save_uts(model, 'Originalsqueezenet', 0, 0)
