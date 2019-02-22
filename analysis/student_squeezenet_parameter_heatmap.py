@@ -64,14 +64,14 @@ fig4, ax4 = plt.subplots()
 fig5, ax5 = plt.subplots()
 fig6, ax6 = plt.subplots()
 
-im = ax.imshow(acc,cmap='Spectral')
-im2 = ax2.imshow(val_acc,cmap='Spectral')
+im = ax.imshow(acc,cmap='Blues')
+im2 = ax2.imshow(val_acc,cmap='Blues')
 
-im3 = ax3.imshow(top5,cmap='Spectral')
-im4 = ax4.imshow(val_top5,cmap='Spectral')
+im3 = ax3.imshow(top5,cmap='Blues')
+im4 = ax4.imshow(val_top5,cmap='Blues')
 
-im5 = ax5.imshow(logloss,cmap='Spectral')
-im6 = ax6.imshow(val_logloss,cmap='Spectral')
+im5 = ax5.imshow(logloss,cmap='Blues')
+im6 = ax6.imshow(val_logloss,cmap='Blues')
 
 # We want to show all ticks...
 ax.set_xticks(np.arange(len(temps)))
@@ -116,17 +116,17 @@ plt.setp(ax6.get_xticklabels(), rotation=45, ha="right",
 for i in range(len(lamdas)):
     for j in range(len(temps)):
         text = ax.text(j, i, acc[i, j],
-                       ha="center", va="center", color="w")
+                       ha="center", va="center", color="cyan")
         text2 = ax2.text(j, i, val_acc[i, j],
-                       ha="center", va="center", color="w")
+                       ha="center", va="center", color="cyan")
         text3 = ax3.text(j, i, top5[i, j],
-                       ha="center", va="center", color="w")
+                       ha="center", va="center", color="cyan")
         text4 = ax4.text(j, i, val_top5[i, j],
-                       ha="center", va="center", color="w")
+                       ha="center", va="center", color="cyan")
         text5 = ax5.text(j, i, logloss[i, j],
-                       ha="center", va="center", color="w")
+                       ha="center", va="center", color="cyan")
         text6 = ax6.text(j, i, val_logloss[i, j],
-                       ha="center", va="center", color="w")
+                       ha="center", va="center", color="cyan")
 ax.set_title("Training Accuracy of Student model")
 ax.set_xlabel("Temperature")
 ax.set_ylabel("λ")
@@ -161,5 +161,5 @@ fig4.savefig('DistilledSqueezenetValTop5Acc.jpg', bbox_inches = 'tight', pad_inc
 fig5.savefig('DistilledSqueezenetTrainingLogloss.jpg', bbox_inches = 'tight', pad_inches = 0.02)
 fig6.savefig('DistilledSqueezenetValLogLoss.jpg', bbox_inches = 'tight', pad_inches = 0.02)
 
-#plt.show()
+plt.show()
 

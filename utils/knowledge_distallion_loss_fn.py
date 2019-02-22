@@ -16,4 +16,5 @@ def knowledge_distillation_loss(y_true, y_pred, lambda_const,temperature):
     #    probabilities made softer with temperature
     y_pred, y_pred_soft = y_pred[:, :256], y_pred[:, 256:]
 
-    return lambda_const * logloss(y_true, y_pred) + logloss(y_soft, y_pred_soft)
+    return
+
