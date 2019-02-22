@@ -1,4 +1,5 @@
-# DistillingObjectDetector
+# OLD PROJECT OBSOLETE
+# KEEPING FOR HISTORICAL PURPOSES
 Insight Project of Distilling an Neural Network, which is a method to transfer knowledge from a larger teacher model into a student model
 For a indepth video lecture by Geoffer Hinton see
 https://www.youtube.com/watch?v=EK61htlw8hY
